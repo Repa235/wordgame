@@ -1,0 +1,146 @@
+import { useState } from "react";
+import { Key } from "lucide-react";
+
+export default function WordGame() {
+  const words = [
+    "Sbarrare",
+    "Cacciare",
+    "Porta",
+    "Ospite",
+    "Rete",
+    "Ala",
+    "Catena",
+    "Fortezza",
+    "Lingua",
+    "Tirare",
+    "Andare",
+    "Pianta",
+    "Diritto",
+    "Pena",
+    "Corazza",
+    "Vulnerabilità",
+    "Colmo",
+    "Battuta",
+    "Sutura",
+    "Satura",
+    "Incubare",
+    "Parto",
+    "Riparo",
+    "Sipario",
+  ];
+
+  const possibleCouples = [
+    ["Sbarrare", "Cacciare"],
+    ["Porta", "Ospite"],
+    ["Rete", "Ala"],
+    ["Catena", "Fortezza"],
+    ["Lingua", "Tirare"],
+    ["Andare", "Pianta"],
+    ["Diritto", "Pena"],
+    ["Corazza", "Vulnerabilità"],
+    ["Colmo", "Battuta"],
+    ["Sutura", "Satura"],
+    ["Incubare", "Parto"],
+    ["Riparo", "Sipario"],
+  ];
+
+
+
+
+  const [sequence, setSequence] = useState([]);
+  const [keys, setKeys] = useState(0);
+  const [level, setLevel] = useState([]);
+  const correctSequence = [...words];
+
+  function handleWordClick(word) {
+    console.log("level: ", level);
+    
+    if(level.length==0){
+      setLevel(possibleCouples)
+    }
+
+    console.log("Word:", word);
+    const newSequence = [...sequence, word];
+    setSequence(newSequence);
+    console.log("Sequence:", sequence);
+    console.log("NewSequence:", newSequence);
+
+    
+    if (newSequence.length === 2) {
+      if (isArrayInArray(level, newSequence)) {
+        setKeys(keys + 1);
+        if(keys === 5){
+          alert('Benvenuto a casa!');
+          setKeys(0);
+        }
+      } else {
+        if (areArraysEqualJSON(level, possibleCouples)) {
+          console.log("cambio livello");   
+          setLevel([])
+          setLevel(possibleCouples2);
+        } else {
+          setLevel([])
+          setLevel(possibleCouples);
+        }
+        setKeys(0);
+      }
+    }
+    if (newSequence.length >= 2) {
+      setSequence([]);
+    }
+  }
+  function isArrayInArray(arrayOfArrays: any[][], targetArray: any[]): boolean {
+    return arrayOfArrays.some(
+      (arr) =>
+        arr.length === targetArray.length &&
+        arr.every((value, index) => value === targetArray[index])
+    );
+  }
+
+  function areArraysEqualJSON(arr1: any[], arr2: any[]): boolean {
+  return JSON.stringify(arr1) === JSON.stringify(arr2);
+}
+
+  return (
+    <div
+      className="container"
+      style={{
+        justifyContent: "center",
+        alignItems: "center",
+        display: "flex",
+      }}
+    >
+      <div className="key-section">
+        <img
+          src="/src/images/hand-drawn-house.png"
+          alt="Casa"
+          className="h-10 w-10"
+        />
+        <span className="text-3xl font-extrabold text-brown-900 font-serif">
+          x {keys}
+        </span>
+        <span className="text-red-500">🔑</span>{" "}
+        {/* Esempio di icona di chiave */}
+      </div>
+
+      <div className="words-section">
+        <div style={{ width: "400px" }}>
+          {words.map((word, index) => (
+            <button
+              key={index}
+              onClick={() => handleWordClick(word)}
+              className="word-button"
+              style={{
+                width: "150px",
+                border: "2px solid black", // Bordo di 2px con colore #d35400
+                borderRadius: "5px",
+              }}
+            >
+              {word}
+            </button>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
