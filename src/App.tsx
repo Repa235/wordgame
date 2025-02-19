@@ -27,98 +27,108 @@ export default function WordGame() {
       flexDirection: "column",
       justifyContent: "center",
       alignItems: "center",
-      backgroundColor: "#f0f8ff", // Soft blue background
-      minHeight: "100vh", // Occupy full height
-      padding: "10px", // Reduced padding for a more compact layout
+      backgroundColor: "#f0f8ff",
+      minHeight: "100vh",
+      padding: "10px",
       fontFamily: "'Roboto', sans-serif",
-      overflow: "hidden", // Prevent scrolling
+      overflow: "hidden",
     },
     introSection: {
       textAlign: "center",
-      marginBottom: "15px", // Reduced vertical margin between intro and buttons
-      fontSize: "1.2rem", // Increased font size for the intro text
-      color: "#333",
+      marginBottom: "15px",
+      fontSize: "2rem", // Increased font size for intro text
+      color: "#2c3e50",
       fontWeight: "bold",
-      display: "block", // Default is visible
-    },
-    hiddenIntroSection: {
-      display: "none", // Hide the intro section when 12 keys are reached
     },
     keySection: {
       display: "flex",
       alignItems: "center",
-      gap: "10px", // Reduced gap
-      marginBottom: "10px", // Reduced margin between the key section and words section
+      gap: "10px",
+      marginBottom: "10px",
     },
     wordsSection: {
-      display: "grid", // Use grid layout
-      gridTemplateColumns: "repeat(2, 1fr)", // Two columns
-      gap: "10px", // Reduced gap between buttons
-      maxWidth: "100%", // Ensure layout takes full width
-      justifyContent: "center", // Center the buttons
+      display: "grid",
+      gridTemplateColumns: "repeat(2, 1fr)",
+      gap: "10px",
+      maxWidth: "100%",
+      justifyContent: "center",
     },
     wordButton: {
-      width: "180px", // Further reduced width of buttons
-      height: "35px", // Reduced height for more compact vertical layout
-      border: "2px solid #3498db", // Blue border
+      width: "180px",
+      height: "35px",
+      border: "2px solid #3498db",
       borderRadius: "10px",
-      padding: "6px", // Reduced padding for smaller buttons
-      backgroundColor: "#ecf0f1", // Light grey background
-      color: "#3498db", // Blue text
-      fontSize: "1rem", // Smaller font size for buttons
+      padding: "6px",
+      backgroundColor: "#ecf0f1",
+      color: "#3498db",
+      fontSize: "1rem",
       fontWeight: "bold",
       cursor: "pointer",
       transition: "all 0.3s ease",
-      boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)", // Soft shadow
+      boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
     },
     selectedButton: {
-      backgroundColor: "#3498db", // Blue background for selected
-      color: "#fff", // White text when selected
-      transform: "scale(1.1)", // Slight zoom-in effect on selection
+      backgroundColor: "#3498db",
+      color: "#fff",
+      transform: "scale(1.1)",
     },
     wrongButton: {
-      backgroundColor: "#e74c3c", // Red background for wrong selection
-      color: "#fff", // White text for wrong button
+      backgroundColor: "#e74c3c",
+      color: "#fff",
     },
     keyText: {
-      fontSize: "1.5rem", // Increased font size for the key count text
+      fontSize: "1.5rem",
       fontWeight: "bold",
       color: "#5a3e1b",
     },
     img: {
-      width: "140px", // Reduced width of image
+      width: "140px",
       borderRadius: "10px",
-      transition: "all 0.3s ease", // Smooth transition for size change
+      transition: "all 0.3s ease",
     },
     largeImg: {
-      width: "180px", // Increase the size of the image
+      width: "180px",
     },
     extraLargeImg: {
-      width: "220px", // Further increase the size of the image
+      width: "220px",
     },
     welcomeText: {
-      fontSize: "3rem", // Large font size for the "BENVENUTO A CASA!" message
+      fontSize: "3rem",
       fontWeight: "bold",
-      color: "#3498db", // Blue text for the final message
+      color: "#3498db",
       marginTop: "20px",
     },
     retryButton: {
-      marginTop: "20px", // Add some space between the text and the retry button
-      padding: "10px 20px", // Make the button larger
-      fontSize: "1.2rem", // Larger font size for the button
-      backgroundColor: "#3498db", // Blue background
-      color: "#fff", // White text
+      marginTop: "20px",
+      padding: "10px 20px",
+      fontSize: "1.2rem",
+      backgroundColor: "#3498db",
+      color: "#fff",
       border: "none",
       borderRadius: "5px",
       cursor: "pointer",
       transition: "all 0.3s ease",
     },
+    buttonContainer: {
+      marginTop: "20px",
+    },
+    buttonText: {
+      fontSize: "1rem",
+      fontWeight: "bold",
+      cursor: "pointer",
+      backgroundColor: "#3498db",
+      color: "#fff",
+      padding: "10px 20px",
+      border: "none",
+      borderRadius: "5px",
+    }
   };
 
   const [prevword, setPrevword] = useState("Sipario");
   const [keys, setKeys] = useState(0);
   const [selectedWord, setSelectedWord] = useState<string | null>(null);
-  const [wrongWord, setWrongWord] = useState<string | null>(null); // State for wrong word
+  const [wrongWord, setWrongWord] = useState<string | null>(null);
+  const [showIntro, setShowIntro] = useState(true); // New state to manage intro visibility
 
   const motivationalMessages = [
     "Continua così! Sei sulla strada giusta!",
@@ -156,32 +166,40 @@ export default function WordGame() {
       alert("Hai sbagliato la sequenza! Non arrenderti! Riprova con determinazione!");
       setPrevword("Sipario");
       setSelectedWord(null);
-      setWrongWord(word); // Set the wrong word
+      setWrongWord(word);
     }
 
     setSelectedWord(word);
   }
 
-  // Function to reload the page
   function handleRetry() {
     window.location.reload();
   }
 
+  function handleIntroDismiss() {
+    setShowIntro(false); // Hide the intro section and show the word columns
+  }
+
   return (
     <div style={styles.container}>
-      {/* Introduzione con le regole del gioco */}
-      <div
-        style={{
-          ...styles.introSection,
-          ...(keys === 12 ? styles.hiddenIntroSection : {}), // Hide the intro text when 12 keys are reached
-        }}
-      >
-        <h2>Benvenuto al Gioco delle Parole!</h2>
-        <p>
-          Trova le 12 chiavi di casa con una sequenza di parole. <br></br> Ogni parola deve essere selezionata in ordine preciso, senza distrazioni. <br></br>Se scegli la parola giusta, guadagnerai una chiave! 🔑
-          Il viaggio comincia con "Sipario" e prosegue dal basso verso l'alto, <br></br>se perdi la strada di casa, riparti da questa parola!!
-        </p>
-      </div>
+      {/* Traccia iniziale */}
+      {showIntro && (
+        <div style={styles.introSection}>
+          <h2>Benvenuto al Gioco delle Parole!</h2>
+          <p>
+            Trova le 12 chiavi di casa con una sequenza di parole. <br></br> 
+            Ogni parola deve essere selezionata in ordine preciso, senza distrazioni. <br></br>
+            Se scegli la parola giusta, guadagnerai una chiave! 🔑<br></br>
+            Il viaggio comincia con "Sipario" e prosegue dal basso verso l'alto, <br></br>
+            se perdi la strada di casa, riparti da questa parola!!
+          </p>
+          <div style={styles.buttonContainer}>
+            <button onClick={handleIntroDismiss} style={styles.buttonText}>
+              Ho capito!
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* Sezione delle chiavi */}
       <div style={styles.keySection}>
@@ -190,17 +208,15 @@ export default function WordGame() {
           alt="Casa"
           style={{
             ...styles.img,
-            ...(keys === 12 ? styles.extraLargeImg : {}), // Further increase image size when 12 keys are reached
+            ...(keys === 12 ? styles.extraLargeImg : {}),
           }}
         />
-        <span style={styles.keyText}>
-          x {keys}
-        </span>
+        <span style={styles.keyText}>x {keys}</span>
         <span>🔑</span>
       </div>
 
       {/* Sezione dei bottoni */}
-      {keys < 12 && (
+      {!showIntro && keys < 12 && (
         <div style={styles.wordsSection}>
           {words.map((word: string, index: number) => (
             <button
@@ -209,7 +225,7 @@ export default function WordGame() {
               style={{
                 ...styles.wordButton,
                 ...(selectedWord === word ? styles.selectedButton : {}),
-                ...(wrongWord === word ? styles.wrongButton : {}), // Apply red color if wrong
+                ...(wrongWord === word ? styles.wrongButton : {}),
               }}
             >
               {word}
